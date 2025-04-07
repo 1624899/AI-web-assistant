@@ -1,0 +1,50 @@
+{
+  "manifest_version": 3,
+  "name": "AI网页总结助手",
+  "version": "1.1",
+  "description": "使用 AI 大模型对当前网页进行智能总结，支持大白话模式和交互式问答，增强功能：B站视频总结。",
+  "permissions": [
+    "storage",
+    "contextMenus",
+    "scripting",
+    "sidePanel",
+    "tabs",
+    "webRequest"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "action": {
+    "default_title": "AI网页助手"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["floating.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "options_page": "options.html",
+  "web_accessible_resources": [
+    {
+      "resources": [ "floating.css" ],
+      "matches": [ "<all_urls>" ]
+    }
+  ],
+  "side_panel": {
+    "default_path": "sidebar.html"
+  },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+S",
+        "mac": "Command+Shift+S"
+      },
+      "description": "快速启动AI助手"
+    }
+  }
+}

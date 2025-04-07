@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI网页总结助手 - 设置</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <h1>AI网页总结助手 - API密钥设置</h1>
+  
+  <!-- Unified API Key Sections -->
+  <div class="api-key-section" id="openai-section">
+    <h3>OpenAI API密钥 (GPT模型)</h3>
+    <p>用于GPT模型的API密钥。可以在 <a href="https://platform.openai.com/api-keys" target="_blank">OpenAI API密钥页面</a> 创建。</p>
+    <div class="input-group">
+      <label for="gptApiKey">API Key:</label>
+      <input type="password" id="gptApiKey" placeholder="sk-...">
+      <button class="toggle-visibility" data-target-input="gptApiKey">显示</button>
+    </div>
+  </div>
+  
+  <div class="api-key-section" id="google-section">
+    <h3>Google API密钥 (Gemini模型)</h3>
+    <p>用于Gemini模型的API密钥。可以在 <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio</a> 创建。</p>
+    <div class="input-group">
+      <label for="geminiApiKey">API Key:</label>
+      <input type="password" id="geminiApiKey" placeholder="AIzaSy...">
+      <button class="toggle-visibility" data-target-input="geminiApiKey">显示</button>
+    </div>
+  </div>
+  
+  <div class="api-key-section" id="deepseek-section">
+    <h3>DeepSeek API密钥 (DeepSeek模型)</h3>
+    <p>用于DeepSeek模型的API密钥。可以在 <a href="https://platform.deepseek.com/api_keys" target="_blank">DeepSeek平台</a> 创建。</p>
+    <div class="input-group">
+      <label for="deepseekApiKey">API Key:</label>
+      <input type="password" id="deepseekApiKey" placeholder="sk-...">
+      <button class="toggle-visibility" data-target-input="deepseekApiKey">显示</button>
+    </div>
+  </div>
+  
+  <div class="api-key-section" id="openrouter-section">
+    <h3>OpenRouter API Key</h3>
+    <p>用于通过 OpenRouter 访问其他模型的密钥 (<a href="https://openrouter.ai/keys" target="_blank">获取密钥</a>)。</p>
+    <div class="input-group">
+      <label for="openrouterApiKey">API Key:</label>
+      <input type="password" id="openrouterApiKey" placeholder="sk-or-...">
+      <button class="toggle-visibility" data-target-input="openrouterApiKey">显示</button>
+    </div>
+  </div>
+
+  <!-- Single Save Button for All Unified Sections -->
+  <button id="saveBtn">保存所有设置</button>
+  <p id="status" class="status-message"></p>
+
+  <script src="options.js"></script>
+</body>
+</html> 

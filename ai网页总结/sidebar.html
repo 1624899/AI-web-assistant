@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 总结侧边栏</title>
+    <link rel="stylesheet" href="floating.css"> <!-- 链接共享的 CSS -->
+    <style>
+        /* Add sidebar-specific styles if needed */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh; /* Full height */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
+            font-size: 14px;
+            color: #333333;
+            background-color: #ffffff;
+        }
+        .ai-summary-sidebar-content {
+            flex-grow: 1; /* Allow content to fill space */
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Prevent container overflow */
+        }
+        #ai-summary-tab-content {
+             flex-grow: 1; /* Allow tab content to fill space */
+             overflow-y: auto; /* Enable scroll within tab content */
+             padding: 15px 10px;
+        }
+        /* Ensure header and footer don't take up too much space */
+        .ai-summary-sidebar-header,
+        .ai-summary-sidebar-footer {
+            flex-shrink: 0;
+        }
+         /* Remove styles meant for floating window */
+        /* #ai-summary-sidebar { ... } */ 
+    </style>
+</head>
+<body>
+    <!-- Header (No longer draggable in this context) -->
+    <div class="ai-summary-sidebar-header">
+        <span>AI网页智能助手</span>
+        <!-- Close button might not be needed or work the same way in side panel -->
+        <!-- <button id="ai-summary-close-btn">&times;</button> -->
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="ai-summary-sidebar-content">
+        <!-- Model Selector and Settings -->
+        <div class="ai-summary-model-selector">
+           <select id="ai-summary-model-select" title="选择模型">
+             <option value="">选择模型...</option> 
+           </select>
+           <button id="ai-summary-settings" title="设置API密钥">⚙️</button>
+        </div>
+
+        <!-- Tabs -->
+        <div class="ai-summary-tabs">
+          <button class="ai-summary-tab-button active" data-tab="summary">网页总结</button>
+          <button class="ai-summary-tab-button" data-tab="plain">大白话模式</button>
+          <button class="ai-summary-tab-button" data-tab="chat">智能问答</button>
+        </div>
+
+        <!-- Tab Content Area (Dynamically filled by sidebar.js) -->
+        <div id="ai-summary-tab-content" class="ai-summary-tab-content">
+            <!-- Content will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Footer (Resizer might not be applicable or work the same way) -->
+    <!-- <div class="ai-summary-sidebar-footer"> -->
+        <!-- <div class="ai-summary-resizer"></div> --> 
+    <!-- </div> -->
+
+    <script src="sidebar.js" defer></script> 
+</body>
+</html> 

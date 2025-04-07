@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景圆形 -->
+  <circle cx="64" cy="64" r="60" fill="#4285F4" />
+  
+  <!-- AI文字图标 -->
+  <text x="64" y="80" font-family="Arial, sans-serif" font-weight="bold" font-size="60" fill="white" text-anchor="middle">AI</text>
+  
+  <!-- 文档图标 -->
+  <path d="M88 48H76V36L88 48Z" fill="white" />
+  <path d="M74 36H40C37.8 36 36 37.8 36 40V88C36 90.2 37.8 92 40 92H88C90.2 92 92 90.2 92 88V50L74 36Z" stroke="white" stroke-width="4" fill="none" />
+  
+  <!-- 文档线条 -->
+  <line x1="48" y1="60" x2="80" y2="60" stroke="white" stroke-width="3" />
+  <line x1="48" y1="72" x2="80" y2="72" stroke="white" stroke-width="3" />
+  <line x1="48" y1="84" x2="70" y2="84" stroke="white" stroke-width="3" />
+</svg> 

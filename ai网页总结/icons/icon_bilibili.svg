@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景圆形 -->
+  <circle cx="64" cy="64" r="60" fill="#FB7299" />
+  
+  <!-- Bilibili TV图标 -->
+  <path d="M88 45H40c-3.3 0-6 2.7-6 6v40c0 3.3 2.7 6 6 6h48c3.3 0 6-2.7 6-6V51c0-3.3-2.7-6-6-6z" fill="white"/>
+  <circle cx="50" cy="40" r="5" fill="white"/>
+  <circle cx="78" cy="40" r="5" fill="white"/>
+  
+  <!-- AI文字 -->
+  <text x="64" y="80" font-family="Arial, sans-serif" font-weight="bold" font-size="36" fill="#FB7299" text-anchor="middle">AI</text>
+  
+  <!-- 播放按钮 -->
+  <polygon points="60,64 70,70 60,76" fill="#FB7299"/>
+</svg> 

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI网页总结助手</title>
+  <link rel="stylesheet" type="text/css" href="popup.css">
+  <meta charset="UTF-8">
+</head>
+<body>
+  <div class="header">
+    <h1>AI网页总结助手</h1>
+  </div>
+  
+  <div class="model-selection">
+    <label for="modelSelect">选择模型:</label>
+    <select id="modelSelect">
+      <option value="">加载中...</option>
+    </select>
+    <button id="openOptionsBtn" title="设置API密钥">⚙️</button>
+  </div>
+  
+  <div class="action-buttons">
+    <button id="summarizeBtn">
+      <span class="icon">📄</span>
+      <span class="text">总结当前页面</span>
+    </button>
+    <button id="floatingWindowBtn">
+      <span class="icon">💡</span>
+      <span class="text">打开侧边栏</span>
+    </button>
+  </div>
+  
+  <hr>
+  
+  <div id="summaryOutput">
+    <h2>总结内容:</h2>
+    <p id="summaryText">点击上方按钮开始总结。</p>
+    <button id="plainLangBtn" style="display: none;">切换大白话模式</button>
+  </div>
+  
+  <hr>
+  
+  <div id="chatInterface" style="display: none;">
+    <h2>继续提问:</h2>
+    <div id="chatHistory"></div>
+    <div class="chat-input-container">
+      <input type="text" id="chatInput" placeholder="请输入你的问题...">
+      <button id="sendBtn">发送</button>
+    </div>
+  </div>
+  
+  <div class="footer">
+    💡 提示：您也可以通过右键菜单或选中文字来快速总结或解释，并打开侧边栏。
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html> 
