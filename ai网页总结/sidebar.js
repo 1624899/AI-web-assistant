@@ -115,6 +115,7 @@ function createPageChangePromptElement() {
         .ai-page-change-prompt-buttons {
             display: flex;
             gap: 8px;
+            margin-bottom: 10px;
         }
         .ai-page-change-prompt-button {
             flex: 1;
@@ -161,6 +162,24 @@ function createPageChangePromptElement() {
         .ai-page-change-prompt-close:hover {
             color: #ff6b9d;
         }
+        .ai-page-change-prompt-divider {
+            height: 1px;
+            background-color: #ffd6e6;
+            margin: 10px 0;
+        }
+        .ai-page-change-prompt-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .ai-page-change-prompt-actions .ai-page-change-prompt-button {
+            background-color: #fff0f5;
+            color: #ff6b9d;
+            border: 1px solid #ffd6e6;
+        }
+        .ai-page-change-prompt-actions .ai-page-change-prompt-button:hover {
+            background-color: #ffd6e6;
+            border-color: #ff6b9d;
+        }
     `;
     document.head.appendChild(style);
 }
@@ -192,6 +211,11 @@ function showPageChangePrompt(newPageUrl) {
             `}
             <button class="ai-page-change-prompt-button secondary" id="ai-page-change-chat">提问</button>
         </div>
+        <div class="ai-page-change-prompt-divider"></div>
+        <div class="ai-page-change-prompt-actions">
+            <button class="ai-page-change-prompt-button secondary" id="ai-page-change-clear">清除内容</button>
+            <button class="ai-page-change-prompt-button secondary" id="ai-page-change-keep">保留内容</button>
+        </div>
     `;
     
     // 显示提示
@@ -204,26 +228,60 @@ function showPageChangePrompt(newPageUrl) {
     // 添加按钮事件监听
     document.getElementById('ai-page-change-close').addEventListener('click', hidePageChangePrompt);
     
+    // 添加清除内容按钮事件
+    document.getElementById('ai-page-change-clear').addEventListener('click', () => {
+        // 清空内容状态
+        originalSummary = '';
+        plainLanguageSummary = '';
+        chatMessages = [];
+        // 更新UI
+        switchTab(currentTab);
+        hidePageChangePrompt();
+    });
+    
+    // 添加保留内容按钮事件
+    document.getElementById('ai-page-change-keep').addEventListener('click', () => {
+        // 仅更新当前页面URL
+        currentPageUrl = newPageUrl;
+        hidePageChangePrompt();
+    });
+    
     if (isBilibiliVideo) {
         document.getElementById('ai-page-change-analyze-video').addEventListener('click', () => {
+            // 清空内容状态
+            originalSummary = '';
+            plainLanguageSummary = '';
+            chatMessages = [];
             switchTab('summary');
-            requestFormalSummary(true); // <--- 传递 isVideo = true
+            requestFormalSummary(true);
             hidePageChangePrompt();
         });
         document.getElementById('ai-page-change-plain-video').addEventListener('click', () => {
+            // 清空内容状态
+            originalSummary = '';
+            plainLanguageSummary = '';
+            chatMessages = [];
             switchTab('plain');
-            requestPlainSummary(true); // <--- 传递 isVideo = true
+            requestPlainSummary(true);
             hidePageChangePrompt();
         });
     } else {
         document.getElementById('ai-page-change-summary').addEventListener('click', () => {
+            // 清空内容状态
+            originalSummary = '';
+            plainLanguageSummary = '';
+            chatMessages = [];
             switchTab('summary');
-            requestFormalSummary(false); // <--- 传递 isVideo = false
+            requestFormalSummary(false);
             hidePageChangePrompt();
         });
         document.getElementById('ai-page-change-plain').addEventListener('click', () => {
+            // 清空内容状态
+            originalSummary = '';
+            plainLanguageSummary = '';
+            chatMessages = [];
             switchTab('plain');
-            requestPlainSummary(false); // <--- 传递 isVideo = false
+            requestPlainSummary(false);
             hidePageChangePrompt();
         });
     }
@@ -233,8 +291,8 @@ function showPageChangePrompt(newPageUrl) {
         hidePageChangePrompt();
     });
     
-    // 设置自动消失的定时器 (5秒)
-    pageChangePromptElement.timeoutId = setTimeout(hidePageChangePrompt, 5000);
+    // 设置自动消失的定时器 (10秒)
+    pageChangePromptElement.timeoutId = setTimeout(hidePageChangePrompt, 10000);
     
     // 更新当前页面URL
     currentPageUrl = newPageUrl;
@@ -1540,10 +1598,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 // 检查是否真的是新页面URL
                 if (message.url !== currentPageUrl) {
                     showPageChangePrompt(message.url);
-                    // 清空之前的内容状态
-                    originalSummary = '';
-                    plainLanguageSummary = '';
-                    chatMessages = [];
+                    // 不再立即清空内容状态
+                    // originalSummary = '';
+                    // plainLanguageSummary = '';
+                    // chatMessages = [];
                     // 根据当前标签更新UI
                     switchTab(currentTab);
                 }
