@@ -361,6 +361,49 @@ async function processStream(response, requestAction) {
                 // 调试日志 - 显示处理的每一行
                 console.log(`[STREAM] ${requestAction} 接收行: ${line.substring(0, 50)}${line.length > 50 ? '...' : ''}`);
 
+                // 检查是否包含错误消息
+                if (line.includes('"error"') || line.includes('Rate limit exceeded') || line.includes('rate limit')) {
+                    console.error(`[STREAM] ${requestAction} 检测到API错误: ${line}`);
+                    try {
+                        // 尝试解析错误消息
+                        let errorMessage = "API错误";
+                        if (line.startsWith('data: ')) {
+                            const jsonData = line.substring(6).trim();
+                            try {
+                                const parsedData = JSON.parse(jsonData);
+                                errorMessage = parsedData.error?.message || JSON.stringify(parsedData.error) || "API错误";
+                            } catch (e) {
+                                // 如果不是JSON，直接使用原始文本
+                                errorMessage = jsonData;
+                            }
+                        } else {
+                            // 尝试从行中提取错误信息
+                            const errorMatch = line.match(/"error":\s*{([^}]+)}/);
+                            if (errorMatch) {
+                                const errorContent = errorMatch[1];
+                                const messageMatch = errorContent.match(/"message":\s*"([^"]+)"/);
+                                if (messageMatch) {
+                                    errorMessage = messageMatch[1];
+                                }
+                            } else if (line.includes('Rate limit exceeded')) {
+                                errorMessage = "API速率限制超出，请稍后再试";
+                            }
+                        }
+                        
+                        // 发送错误消息并结束流处理
+                        sendRuntimeMessage({ action: "streamError", requestAction: requestAction, error: errorMessage });
+                        reader.releaseLock();
+                        console.log(`Stream reader released for ${requestAction} due to error.`);
+                        return; // 提前退出函数
+                    } catch (e) {
+                        console.error(`[STREAM] ${requestAction} 处理错误消息时出错:`, e.message);
+                        // 发送通用错误消息
+                        sendRuntimeMessage({ action: "streamError", requestAction: requestAction, error: "API返回错误" });
+                        reader.releaseLock();
+                        return;
+                    }
+                }
+
                 if (line.startsWith('data: ')) {
                     const jsonData = line.substring(6).trim();
                     if (jsonData === '[DONE]') continue; // OpenAI结束信号

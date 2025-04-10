@@ -1728,7 +1728,11 @@ function handleStreamEnd(success, targetAction) {
     console.log(`[侧边栏 handleStreamEnd] ${targetAction} 的流已结束。成功: ${success}`);
     const finalContent = accumulatedStreamContent;
     
-    if (success) {
+    // 检查是否有实际内容
+    const hasContent = finalContent && finalContent.trim().length > 0;
+    
+    // 只有在成功且有内容时才处理为成功
+    if (success && hasContent) {
         if (targetAction === 'getSummary') {
             originalSummary = finalContent;
             
@@ -1817,10 +1821,10 @@ function handleStreamEnd(success, targetAction) {
         }
         // 保存最终状态
         chrome.runtime.sendMessage({ action: "saveState", state: { summary: originalSummary, plainSummary: plainLanguageSummary, chatHistory: chatMessages, modelId: currentModelId } });
-
     } else {
-        // 错误状态应该已经由 handleStreamError 处理
-        console.warn(`[侧边栏 handleStreamEnd] ${targetAction} 的流以 success=false 结束。错误应该已经被先前处理。`);
+        // 如果没有内容，视为错误
+        console.warn(`[侧边栏 handleStreamEnd] ${targetAction} 的流结束但没有内容。视为错误。`);
+        handleStreamError("生成内容失败，请重试", targetAction);
     }
     
     // 在所有处理完成后重置流状态和加载状态
