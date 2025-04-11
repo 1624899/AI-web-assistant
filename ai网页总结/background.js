@@ -93,6 +93,12 @@ const models = [
     id: "gpt-3.5-turbo", name: "GPT-3.5 Turbo (OpenAI 原生)", endpoint: "https://api.openai.com/v1/chat/completions", apiKeyName: "openaiApiKey",
   },
   {
+    id: "openrouter-llama-4-maverick-free", name: "Llama 4 Maverick (OpenRouter 免费)", openRouterId: "meta-llama/llama-4-maverick:free", endpoint: "https://openrouter.ai/api/v1/chat/completions", apiKeyName: "openRouterApiKey",
+  },
+  {
+    id: "openrouter-llama-4-scout-free", name: "Llama 4 Scout (OpenRouter 免费)", openRouterId: "meta-llama/llama-4-scout:free", endpoint: "https://openrouter.ai/api/v1/chat/completions", apiKeyName: "openRouterApiKey",
+  },
+  {
     id: "openrouter-deepseek-v3-free", name: "DeepSeek V3 (OpenRouter 免费)", openRouterId: "deepseek/deepseek-chat-v3-0324:free", endpoint: "https://openrouter.ai/api/v1/chat/completions", apiKeyName: "openRouterApiKey",
   },
   {
