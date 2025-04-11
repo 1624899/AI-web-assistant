@@ -104,11 +104,14 @@ const models = [
   {
     id: "openrouter-gemini-2.5-pro-free", name: "Gemini Pro 2.5 Exp (OpenRouter 免费)", openRouterId: "google/gemini-2.5-pro-exp-03-25:free", endpoint: "https://openrouter.ai/api/v1/chat/completions", apiKeyName: "openRouterApiKey",
   },
-   {
+  {
     id: "openrouter-qwen-2.5-vl-free", name: "Qwen 2.5 VL Instruct (OpenRouter 免费)", openRouterId: "qwen/qwen2.5-vl-72b-instruct:free", endpoint: "https://openrouter.ai/api/v1/chat/completions", apiKeyName: "openRouterApiKey",
   },
   {
-    id: "openrouter-gemini-flash-2.0-free", name: "Gemini Flash 2.0 Exp (OpenRouter 免费)", openRouterId: "google/gemini-2.0-flash-exp:free", endpoint: "https://openrouter.ai/api/v1/chat/completions", apiKeyName: "openRouterApiKey",
+    id: "openrouter-gemini-flash-thinking-exp-free", name: "Gemini Flash Thinking 2.0 Exp (OpenRouter 免费)", openRouterId: "google/gemini-2.0-flash-thinking-exp:free", endpoint: "https://openrouter.ai/api/v1/chat/completions", apiKeyName: "openRouterApiKey",
+  },
+  {
+    id: "openrouter-quasar-alpha", name: "Quasar Alpha (OpenRouter 免费)", openRouterId: "openrouter/quasar-alpha", endpoint: "https://openrouter.ai/api/v1/chat/completions", apiKeyName: "openRouterApiKey",
   },
 ];
 
