@@ -35,7 +35,7 @@
 
 ## 🔑 API密钥设置
 
-为了使用AI网页助手的功能，您需要设置API密钥：
+为了使用AI网页助手的功能，您需要设置API密钥：（推荐使用原生deepseek，费用低；Openrouter的Llama4、deepseek，免费但是有限制每日额度）
 
 1. **获取API密钥**
    - 访问您选择的AI服务提供商网站（如OpenAI、OpenRouter等，扩展设置界面可直接点击带颜色字体访问）
