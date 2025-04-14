@@ -113,6 +113,15 @@ const models = [
   {
     id: "openrouter-quasar-alpha", name: "Quasar Alpha (OpenRouter 免费)", openRouterId: "openrouter/quasar-alpha", endpoint: "https://openrouter.ai/api/v1/chat/completions", apiKeyName: "openRouterApiKey",
   },
+  {
+    id: "gemini-2.5-pro-exp-03-25", name: "Gemini 2.5 Pro Experimental (暂时官方已关闭接口)", endpoint: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5.pro-exp-03-25:streamGenerateContent", apiKeyName: "googleApiKey",
+  },
+  {
+    id: "gemini-2.0-flash", name: "Gemini 2.0 Flash (谷歌官方)", endpoint: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:streamGenerateContent", apiKeyName: "googleApiKey",
+  },
+  {
+    id: "gemini-2.0-flash-lite", name: "Gemini 2.0 Flash Lite (谷歌官方)", endpoint: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:streamGenerateContent", apiKeyName: "googleApiKey",
+  },
 ];
 
 // 添加默认系统提示词定义
@@ -253,9 +262,51 @@ async function callLlmApi(modelId, messages, temperature, stream = false, reques
      });
      headers["Accept"] = stream ? "text/event-stream" : "application/json";
    } else if (model.apiKeyName === 'googleApiKey') {
-        // Placeholder for Gemini specific logic if added later
-        sendRuntimeMessage({ action: "streamError", requestAction: requestAction, error: "Google API key logic not fully implemented yet." });
-        return null;
+        // Google Gemini API 实现
+        headers["x-goog-api-key"] = apiKey;
+        
+        // 构建适配Google API的请求体格式
+        const formattedMessages = messages.map(msg => {
+            return {
+                role: msg.role === "system" ? "user" : msg.role, // Google API 没有system角色，转为user
+                parts: [{ text: msg.content }]
+            };
+        });
+        
+        // 构建Gemini模型请求体
+        body = JSON.stringify({
+            contents: formattedMessages,
+            generationConfig: {
+                temperature: temperature,
+                topP: 0.8,
+                topK: 40,
+                maxOutputTokens: 4096,
+            },
+            safetySettings: [
+                {
+                    category: "HARM_CATEGORY_HARASSMENT",
+                    threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                },
+                {
+                    category: "HARM_CATEGORY_HATE_SPEECH",
+                    threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                },
+                {
+                    category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                    threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                },
+                {
+                    category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+                    threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                }
+            ]
+        });
+        
+        if (stream) {
+            // 添加流式参数
+            endpoint = `${model.endpoint}?alt=sse`;
+            headers["Accept"] = "text/event-stream";
+        }
    } else {
        sendRuntimeMessage({ action: "streamError", requestAction: requestAction, error: "Unsupported API type configured" });
       return null;
@@ -413,6 +464,12 @@ async function processStream(response, requestAction) {
                     }
                 }
 
+                // 处理Gemini API特殊前缀，如果有的话
+                if (line.trim() === '[START]' || line.trim() === '[DONE]') {
+                    // 这些是Google Gemini API的特殊标记，可以忽略
+                    continue;
+                }
+
                 if (line.startsWith('data: ')) {
                     const jsonData = line.substring(6).trim();
                     if (jsonData === '[DONE]') continue; // OpenAI结束信号
@@ -434,9 +491,23 @@ async function processStream(response, requestAction) {
                             sendRuntimeMessage({ action: "streamChunk", requestAction: requestAction, chunk: jsonData });
                         }
                     }
-                } else if (line.includes('"content":"') || line.includes('"text":"')) {
-                    // 处理可能没有data:前缀的JSON片段
+                } else if (line.includes('"content":"') || line.includes('"text":"') || 
+                          line.includes('"candidates"') || line.includes('"parts"')) {
+                    // 处理可能没有data:前缀的JSON片段，包括Gemini的响应格式
                     try {
+                        // 尝试直接将整行作为JSON解析
+                        try {
+                            const parsedLine = JSON.parse(line);
+                            const chunkText = extractTextFromChunk(parsedLine);
+                            if (chunkText) {
+                                console.log(`[STREAM] ${requestAction} 从整行JSON提取: [${chunkText.substring(0, 30)}${chunkText.length > 30 ? '...' : ''}]`);
+                                sendRuntimeMessage({ action: "streamChunk", requestAction: requestAction, chunk: chunkText });
+                                continue; // 已处理，继续下一行
+                            }
+                        } catch (e) {
+                            // 不是有效JSON，尝试从行中提取文本
+                        }
+                        
                         const chunkText = extractTextFromRawLine(line);
                         if (chunkText) {
                             console.log(`[STREAM] ${requestAction} 从原始行提取: [${chunkText.substring(0, 30)}${chunkText.length > 30 ? '...' : ''}]`);
@@ -484,6 +555,19 @@ function extractTextFromChunk(parsedData) {
         // 部分Gemini实现可能使用不同结构
         if (parsedData.candidates[0].text) {
             return parsedData.candidates[0].text;
+        }
+        
+        // 流式响应格式处理
+        if (parsedData.candidates[0].delta && parsedData.candidates[0].delta.content) {
+            const content = parsedData.candidates[0].delta.content;
+            if (content.parts && content.parts.length > 0) {
+                return content.parts[0].text || '';
+            }
+        }
+        
+        // 尝试处理可能的流式更新
+        if (parsedData.candidates[0].content?.parts?.[0]?.text) {
+            return parsedData.candidates[0].content.parts[0].text;
         }
     }
     

@@ -1,8 +1,8 @@
 // options.js
 document.addEventListener('DOMContentLoaded', () => {
     // Keep only references to the unified input fields and the single save button
-    const gptApiKeyInput = document.getElementById('gptApiKey');
-    const geminiApiKeyInput = document.getElementById('geminiApiKey'); // Keep for now, might remove model later
+    const openaiApiKeyInput = document.getElementById('openaiApiKey');
+    const googleApiKeyInput = document.getElementById('googleApiKey'); // 更改元素ID以匹配HTML
     const deepseekApiKeyInput = document.getElementById('deepseekApiKey');
     const openrouterApiKeyInput = document.getElementById('openrouterApiKey'); // Keep for now, might remove model later
     const saveBtn = document.getElementById('saveBtn');
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function loadApiKeys() {
         console.log("Loading keys from LOCAL storage...");
         // Adjust keys based on kept models if simplifying later
-        chrome.storage.local.get(['gptApiKey', 'geminiApiKey', 'deepseekApiKey', 'openrouterApiKey'], (result) => {
+        chrome.storage.local.get(['openaiApiKey', 'googleApiKey', 'deepseekApiKey', 'openRouterApiKey'], (result) => {
              if (chrome.runtime.lastError) {
                 console.error("Error loading keys from local storage:", chrome.runtime.lastError);
                 statusElement.textContent = '加载密钥出错: ' + chrome.runtime.lastError.message;
@@ -48,41 +48,41 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             console.log("Keys loaded from local storage:", result);
-            if (result.gptApiKey) {
-                gptApiKeyInput.value = result.gptApiKey;
+            if (result.openaiApiKey) {
+                openaiApiKeyInput.value = result.openaiApiKey;
             }
-            // Keep loading logic for now, even if models are removed later in background.js
-            if (result.geminiApiKey && geminiApiKeyInput) {
-                geminiApiKeyInput.value = result.geminiApiKey;
+            // 更新为使用googleApiKey
+            if (result.googleApiKey && googleApiKeyInput) {
+                googleApiKeyInput.value = result.googleApiKey;
             }
             if (result.deepseekApiKey) {
                 deepseekApiKeyInput.value = result.deepseekApiKey;
             }
-            if (result.openrouterApiKey && openrouterApiKeyInput) {
-                openrouterApiKeyInput.value = result.openrouterApiKey;
+            if (result.openRouterApiKey && openrouterApiKeyInput) {
+                openrouterApiKeyInput.value = result.openRouterApiKey;
             }
         });
     }
 
     // 保存 API 密钥 (to LOCAL storage) - Only uses the single save button
     function saveApiKeys() {
-        const gptKey = gptApiKeyInput ? gptApiKeyInput.value.trim() : '';
-        const geminiKey = geminiApiKeyInput ? geminiApiKeyInput.value.trim() : ''; // Keep for now
+        const openaiKey = openaiApiKeyInput ? openaiApiKeyInput.value.trim() : '';
+        const googleKey = googleApiKeyInput ? googleApiKeyInput.value.trim() : ''; // 更新变量名
         const deepseekKey = deepseekApiKeyInput ? deepseekApiKeyInput.value.trim() : '';
-        const openrouterKey = openrouterApiKeyInput ? openrouterApiKeyInput.value.trim() : ''; // Keep for now
+        const openrouterKey = openrouterApiKeyInput ? openrouterApiKeyInput.value.trim() : '';
 
         const keysToSave = {
-            gptApiKey: gptKey,
-            geminiApiKey: geminiKey, // Save even if model removed, doesn't hurt
+            openaiApiKey: openaiKey, // 更新为正确的键名 
+            googleApiKey: googleKey, // 更新为正确的键名
             deepseekApiKey: deepseekKey,
-            openrouterApiKey: openrouterKey // Save even if model removed
+            openRouterApiKey: openrouterKey // 确保大小写正确
         };
 
         console.log("Attempting to save keys to LOCAL storage:", {
-             gptApiKey: gptKey ? '[SET]' : '[EMPTY]', 
-             geminiApiKey: geminiKey ? '[SET]' : '[EMPTY]', 
+             openaiApiKey: openaiKey ? '[SET]' : '[EMPTY]', 
+             googleApiKey: googleKey ? '[SET]' : '[EMPTY]', 
              deepseekApiKey: deepseekKey ? '[SET]' : '[EMPTY]', 
-             openrouterApiKey: openrouterKey ? '[SET]' : '[EMPTY]' 
+             openRouterApiKey: openrouterKey ? '[SET]' : '[EMPTY]' 
         });
 
         // Save to local storage instead of sync
