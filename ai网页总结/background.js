@@ -114,9 +114,6 @@ const models = [
     id: "openrouter-quasar-alpha", name: "Quasar Alpha (OpenRouter 免费)", openRouterId: "openrouter/quasar-alpha", endpoint: "https://openrouter.ai/api/v1/chat/completions", apiKeyName: "openRouterApiKey",
   },
   {
-    id: "gemini-2.5-pro-exp-03-25", name: "Gemini 2.5 Pro Experimental (暂时官方已关闭接口)", endpoint: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5.pro-exp-03-25:streamGenerateContent", apiKeyName: "googleApiKey",
-  },
-  {
     id: "gemini-2.0-flash", name: "Gemini 2.0 Flash (谷歌官方)", endpoint: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:streamGenerateContent", apiKeyName: "googleApiKey",
   },
   {
