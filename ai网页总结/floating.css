@@ -762,22 +762,26 @@
   outline-offset: 1px;
 }
 
-/* 自定义滚动条 */
-::-webkit-scrollbar {
+/* 只在插件侧边栏和浮窗内自定义滚动条 */
+.ai-summary-sidebar-window ::-webkit-scrollbar,
+.ai-summary-floating-window ::-webkit-scrollbar {
   width: 6px;
 }
 
-::-webkit-scrollbar-track {
-  background: #fff9fb; 
+.ai-summary-sidebar-window ::-webkit-scrollbar-track,
+.ai-summary-floating-window ::-webkit-scrollbar-track {
+  background: #fff9fb;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #ffc5db; 
+.ai-summary-sidebar-window ::-webkit-scrollbar-thumb,
+.ai-summary-floating-window ::-webkit-scrollbar-thumb {
+  background: #ffc5db;
   border-radius: 3px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #ff8db4; 
+.ai-summary-sidebar-window ::-webkit-scrollbar-thumb:hover,
+.ai-summary-floating-window ::-webkit-scrollbar-thumb:hover {
+  background: #ff8db4;
 }
 
 /* 响应式适配 */
